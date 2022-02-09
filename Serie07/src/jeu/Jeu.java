@@ -20,6 +20,7 @@ public class Jeu {
         int couleurJoueur = ROUGE;
         int colonne; 
         boolean gagne;
+        boolean pleine;
             
         initialise( grille );
         affiche( grille );
@@ -30,10 +31,16 @@ public class Jeu {
     	   affiche(grille);
     	   
     	   gagne = estCeGagne(grille, colonne, couleurJoueur);
+    	   pleine = estPleine( grille );
     	  
     	   couleurJoueur = alterneJoueur(couleurJoueur);
     	   
-       }while(! gagne) ;
+       }while(! gagne && ! pleine) ;
+       
+       // il se peut qu'un joueur gagne au dernier coup
+       if(pleine && ! gagne) {
+           System.out.println( "Match nul !" );
+       }
         
     }
     
@@ -213,7 +220,7 @@ public class Jeu {
     	return false;
     }
     
-    // on va verifier si la ligne sup contient une case vide
+    
     public static boolean estCeGagne(int[][] grille, int colonne, int CouleurJoueur) {
     	boolean estCeGagne = compte(grille, colonne, CouleurJoueur);
     	if(estCeGagne) {
@@ -228,15 +235,17 @@ public class Jeu {
     		System.out.println(" a gagné. Bravoooooooooooo !");
     		return true;
     	}
-    	int j = 0;
-    	while(j < grille[0].length) {
-    		if(grille[0][j] == VIDE) {
-    			return false;
-    		}
-    		++j;
-    	}
-    	System.out.println("Jeu terminé. Match nul !");
-    	return true;
+    	return estCeGagne;
+    }
+    
+    public static boolean estPleine(int[][] grille) {
+     // on va verifier si la ligne sup contient une case vide
+        for(int j = 0; j < grille[0].length; ++j) {
+            if(grille[0][j] == VIDE) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
